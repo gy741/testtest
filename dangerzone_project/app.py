@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file
 from werkzeug.utils import secure_filename
 import os
 import subprocess
@@ -24,8 +24,9 @@ def upload_file():
       subprocess.call(["/usr/bin/dangerzone-container" " pixelstopdf --pixel-dir /tmp/dangerzone-pixel --safe-dir /tmp/dangerzone-safe --container-name flmcode/dangerzone --ocr 0 --ocr-lang eng"], shell=True)
 
       os.rename("/tmp/dangerzone-safe/safe-output-compressed.pdf", "/tmp/dangerzone-safe/" + filename + "_" + "safe-output.pdf")
-      
-      return 'uploads 디렉토리 -> 파일 업로드 성공!'
+
+      return send_file("/tmp/dangerzone-safe/" + filename + "_" + "safe-output.pdf", mimetype='application/pdf')
+
 
 if __name__ == '__main__':
     #서버 실행
